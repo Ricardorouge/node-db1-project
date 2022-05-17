@@ -47,8 +47,10 @@ router.put('/:id',checkAccountId,checkAccountPayload, async(req, res, next) => {
   }
 });
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id',checkAccountId, (req, res, next) => {
   // DO YOUR MAGIC
+  Accounts.deleteById(req.params.id)
+  .then(result=>res.json(result))
 })
 
 router.use((err, req, res, next) => { // eslint-disable-line

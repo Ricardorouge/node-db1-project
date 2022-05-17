@@ -24,11 +24,11 @@ const updateById = async(id, account) => {
   return getById(id)
 }
 
-const deleteById = id => {
+const deleteById = async id => {
   // DO YOUR MAGIC
-  const result = getById(id)
-  db('accounts')
-  .delete()
+  const result = await getById(id)
+  await db('accounts')
+  .del()
   .where({id:id})
   return result
 }
