@@ -1,15 +1,38 @@
+const Accounts = require('./accounts-model')
+const {checkAccountId,checkAccountNameUnique,checkAccountPayload} = require('./accounts-middleware')
+
 const router = require('express').Router()
 
 router.get('/', (req, res, next) => {
   // DO YOUR MAGIC
+  Accounts.getAll()
+  .then(result=>{
+    result?
+    res.json(result)
+    :
+    res.json([])
+  })
+  .catch(next)
 })
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id',checkAccountId, (req, res, next) => {
   // DO YOUR MAGIC
+  res.json(req.account)
 })
 
-router.post('/', (req, res, next) => {
+router.post('/',checkAccountPayload,checkAccountNameUnique, async(req, res, next) => {
   // DO YOUR MAGIC
+ try{
+   const {name,budget} = req.body
+   const newAccount = await Accounts.create({
+     name:name.trim(),
+     budget:budget
+   })
+   res.status(201).json(newAccount)
+ }
+ catch(err){
+   next(err)
+ }
 })
 
 router.put('/:id', (req, res, next) => {
